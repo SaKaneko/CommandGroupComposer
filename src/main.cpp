@@ -28,7 +28,9 @@ int main(int argc, char* argv[]) {
   auto filelist = FU.GetImitateFiles(MdgDir, OutputDir);
   for (auto& x : filelist) {
     CGC::Graph G(x.first);
-    }
+    CGC::CGInfo cgi;
+    G.ComposeCGsandGraphsandOutput(cgi, x.second);
+  }
 
   return 0;
 }
