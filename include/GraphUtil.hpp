@@ -51,6 +51,15 @@ public:
     }
     for (int i = 0; i < var_cg; i++) {
       ofs << W[i] << " " << CCOST[i] << std::endl;
+      for (int j = 0; j < W[i]; j++) {
+        ofs << type_kernel[i][j];
+        if (j == W[i] - 1) {
+          ofs << std::endl;
+        }
+        else {
+          ofs << " ";
+        }
+      }
     }
     std::string reading_line_buffer;
     int kernel_type_itr = 0;
