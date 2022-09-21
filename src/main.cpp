@@ -13,7 +13,7 @@ int main(int argc, char* argv[]) {
     MdgDir = "C:/Users/thebe/working/Massive-Dags-Generator/build/MdgOut";
   }
   else {
-    if (argc != 2) {
+    if (argc < 2) {
       std::cout << "You need only 1 path in commandline input to execute this "
                    "application!"
                 << std::endl;
