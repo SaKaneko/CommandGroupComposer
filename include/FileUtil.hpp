@@ -103,7 +103,7 @@ public:
     std::vector<std::pair<fs::path, fs::path>> ret;
     for (const fs::directory_entry& x :
          fs::recursive_directory_iterator(target)) {
-      if (!x.is_directory()) {
+      if (!x.is_directory() && x.path().extension() == ".txt") {
         ret.push_back(
             {x.path(), GenerateRoot / x.path().lexically_proximate(target)});
       }
