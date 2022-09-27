@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <vector>
 #include <fstream>
 #include <filesystem>
 namespace fs                        = std::filesystem;

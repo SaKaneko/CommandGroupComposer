@@ -6,7 +6,7 @@
 #include "../include/GraphUtil.hpp"
 CGC::FileUtil FU;
 namespace fs    = std::filesystem;
-const bool test = true;
+const bool test = false;
 void RunForEachParams(fs::path p, fs::path outroot = ".") {
   std::string OutputDirName;
   for (auto& vcg : CGC::VAR_CG_loader) {
@@ -39,19 +39,23 @@ void RunForEachParams(fs::path p, fs::path outroot = ".") {
 }
 int main(int argc, char* argv[]) {
   fs::path MdgDir;
+  fs::path OutDir = ".";
   if (test) {
     MdgDir = "C:/Users/thebe/working/Massive-Dags-Generator/build/GraphBase";
   }
   else {
-    if (argc < 2) {
-      std::cout << "You need only 1 path in commandline input to execute this "
+    if (argc < 2 || argc >=4 ) {
+      std::cout << "You need 1 or 2 path in commandline input to execute this "
                    "application!"
                 << std::endl;
       abort();
     }
     MdgDir = argv[1];
+    if(argc==3){
+      OutDir = argv[2];
+    }
   }
-  auto rootpath = FU.CreateDirectory(".", "CGCout");
+  auto rootpath = FU.CreateDirectory(OutDir, "CGCout");
   RunForEachParams(MdgDir, rootpath);
   return 0;
 }
