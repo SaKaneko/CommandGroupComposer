@@ -7,10 +7,31 @@
 #include <string>
 #include <set>
 #include <map>
+#include "Params.hpp"
 
 namespace fs = std::filesystem;
 
 namespace CGC {
+fs::path add_conf(fs::path pt) {
+  if (pt.extension() == ".conf") {
+    std::ofstream ofs;
+    ofs.open(pt, std::ios::app);
+    ofs << "Var_CG " << CGC::VAR_CG << std::endl;
+    ofs << "ECR " << CGC::ECR << std::endl;
+    ofs << "CCE " << CGC::CCE << std::endl;
+    ofs.close();
+  }
+  else {
+    pt = pt / "config.conf";
+    std::ofstream ofs;
+    ofs.open(pt);
+    ofs << "Var_CG " << CGC::VAR_CG << std::endl;
+    ofs << "ECR " << CGC::ECR << std::endl;
+    ofs << "CCE " << CGC::CCE << std::endl;
+    ofs.close();
+  }
+  return pt;
+}
 class FileUtil {
   std::map<fs::path, std::map<std::string, int>> rollingmap;
 
@@ -96,14 +117,15 @@ public:
   }
 
   std::vector<std::pair<fs::path, fs::path>>
-  GetImitateFiles(fs::path target, fs::path GenerateRoot) {
+  GetImitateFiles(fs::path target, fs::path GenerateRoot,
+                  std::string tstem = ".txt") {
     if (target.empty()) {
       abort();
     }
     std::vector<std::pair<fs::path, fs::path>> ret;
     for (const fs::directory_entry& x :
          fs::recursive_directory_iterator(target)) {
-      if (!x.is_directory() && x.path().extension() == ".txt") {
+      if (!x.is_directory() && x.path().extension() == tstem) {
         ret.push_back(
             {x.path(), GenerateRoot / x.path().lexically_proximate(target)});
       }
