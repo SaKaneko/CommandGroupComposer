@@ -7,19 +7,23 @@
 CGC::FileUtil FU;
 namespace fs    = std::filesystem;
 const bool test = false;
+const int total_roop =
+    CGC::VAR_CG_loader.size() * CGC::ECR_loader.size() * CGC::CCE_loader.size();
+int progress = 0;
 void RunForEachParams(fs::path p, fs::path outroot = ".") {
   std::string OutputDirName;
   for (auto& vcg : CGC::VAR_CG_loader) {
-    CGC::VAR_CG   = vcg;
-    OutputDirName = "VAR_CG_" + std::to_string(vcg);
-    auto vp       = FU.CreateDirectory(outroot, OutputDirName);
+    CGC::VAR_CG     = vcg;
+    CGC::VAR_KERNEL = 2 * vcg;
+    OutputDirName   = "VAR_CG_" + std::to_string(vcg);
+    auto vp         = FU.CreateDirectory(outroot, OutputDirName);
     for (auto& ecr : CGC::ECR_loader) {
       CGC::ECR      = ecr;
       OutputDirName = "ECR_" + std::to_string(ecr);
       auto ecrp     = FU.CreateDirectory(vp, OutputDirName);
       for (auto& cce : CGC::CCE_loader) {
         CGC::CCE      = cce;
-        OutputDirName = "cce_" + std::to_string(cce);
+        OutputDirName = "CCE_" + std::to_string(cce);
         auto ccep     = FU.CreateDirectory(ecrp, OutputDirName);
         auto dirlist  = FU.GenerateImitateDir(p, ccep);
         auto filelist = FU.GetImitateFiles(p, ccep);
@@ -33,6 +37,8 @@ void RunForEachParams(fs::path p, fs::path outroot = ".") {
           fs::copy(i.first, i.second);
           CGC::add_conf(i.second);
         }
+        progress++;
+        std::cout << progress << " / " << total_roop << std::endl;
       }
     }
   }
@@ -44,18 +50,18 @@ int main(int argc, char* argv[]) {
     MdgDir = "C:/Users/thebe/working/Massive-Dags-Generator/build/GraphBase";
   }
   else {
-    if (argc < 2 || argc >=4 ) {
+    if (argc < 2 || argc >= 4) {
       std::cout << "You need 1 or 2 path in commandline input to execute this "
                    "application!"
                 << std::endl;
       abort();
     }
     MdgDir = argv[1];
-    if(argc==3){
+    if (argc == 3) {
       OutDir = argv[2];
     }
   }
-  auto rootpath = FU.CreateDirectory(OutDir, "CGCout");
+  auto rootpath = FU.CreateDirectory(OutDir, "CGCout_CCEdetail");
   RunForEachParams(MdgDir, rootpath);
   return 0;
 }
