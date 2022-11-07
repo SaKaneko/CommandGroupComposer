@@ -13,10 +13,9 @@ int progress = 0;
 void RunForEachParams(fs::path p, fs::path outroot = ".") {
   std::string OutputDirName;
   for (auto& vcg : CGC::VAR_CG_loader) {
-    CGC::VAR_CG     = vcg;
-    CGC::VAR_KERNEL = 2 * vcg;
-    OutputDirName   = "VAR_CG_" + std::to_string(vcg);
-    auto vp         = FU.CreateDirectory(outroot, OutputDirName);
+    CGC::VAR_CG   = vcg;
+    OutputDirName = "VAR_CG_" + std::to_string(vcg);
+    auto vp       = FU.CreateDirectory(outroot, OutputDirName);
     for (auto& ecr : CGC::ECR_loader) {
       CGC::ECR      = ecr;
       OutputDirName = "ECR_" + std::to_string(ecr);
@@ -28,6 +27,7 @@ void RunForEachParams(fs::path p, fs::path outroot = ".") {
         auto dirlist  = FU.GenerateImitateDir(p, ccep);
         auto filelist = FU.GetImitateFiles(p, ccep);
         for (auto& x : filelist) {
+          CGC::VAR_KERNEL = 0;
           CGC::Graph G(x.first);
           CGC::CGInfo cgi;
           G.ComposeCGsandGraphsandOutput(cgi, x.second);
@@ -61,7 +61,7 @@ int main(int argc, char* argv[]) {
       OutDir = argv[2];
     }
   }
-  auto rootpath = FU.CreateDirectory(OutDir, "CGCout_diftasks");
+  auto rootpath = FU.CreateDirectory(OutDir, "CGCout_uniquetask");
   RunForEachParams(MdgDir, rootpath);
   return 0;
 }

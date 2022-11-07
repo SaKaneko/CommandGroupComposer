@@ -7,7 +7,7 @@
 namespace fs = std::filesystem;
 namespace CGC {
 class CGInfo {
-  int var_cg, var_kernel;
+  int var_cg;
   std::vector<int> ECOST;
   std::vector<int> CCOST;
   std::vector<int> W;
@@ -15,26 +15,28 @@ class CGInfo {
 
 public:
   CGInfo()
-      : var_cg(CGC::VAR_CG), var_kernel(CGC::VAR_KERNEL), ECOST(0),
-        CCOST(CGC::VAR_CG, 0), W(CGC::VAR_CG, 1), type_kernel(CGC::VAR_CG) {
+      : var_cg(CGC::VAR_CG), ECOST(0), CCOST(CGC::VAR_CG, 0), W(CGC::VAR_CG, 1),
+        type_kernel(CGC::VAR_CG) {
+    double AVR_ECOST = REC_TIME_MS * ECR;
+    double AVR_CCOST = REC_TIME_MS * ECR * CCE;
     for (auto& i : ECOST) {
-      double AVR = REC_TIME_MS * ECR;
-      i          = BoundNormalDistribution(AVR, AVR / 3, 1, AVR * 2);
+      i = BoundNormalDistribution(AVR_ECOST, AVR_ECOST / 3, 1, AVR_ECOST * 2);
     }
     for (auto& i : CCOST) {
-      double AVR = REC_TIME_MS * ECR * CCE;
-      i          = BoundNormalDistribution(AVR, AVR / 3, 1, AVR * 2);
+      i = BoundNormalDistribution(AVR_CCOST, AVR_CCOST / 3, 1, AVR_CCOST * 2);
     }
     std::random_device rnd;
     std::mt19937 mt(rnd());
-    std::uniform_int_distribution<> randW(1, CGC::MAX_W),
-        randkernel(0, CGC::VAR_KERNEL - 1);
+    std::uniform_int_distribution<> randW(1, CGC::MAX_W);
     for (auto& i : W) {
       i = randW(mt);
     }
     for (int i = 0; i < type_kernel.size(); i++) {
       for (int j = 0; j < W[i]; j++) {
-        type_kernel[i].push_back(randkernel(mt));
+        type_kernel[i].push_back(CGC::VAR_KERNEL);
+        CGC::VAR_KERNEL++;
+        ECOST.push_back(BoundNormalDistribution(AVR_ECOST, AVR_ECOST / 3, 1,
+                                                AVR_ECOST * 2));
       }
     }
   }
@@ -44,7 +46,7 @@ public:
     std::ifstream ifs;
     ifs.open(base_p, std::ios::in);
     ofs.open(output_p);
-    ofs << var_cg << " " << var_kernel << std::endl;
+    ofs << var_cg << " " << CGC::VAR_KERNEL << std::endl;
     for (auto& i : ECOST) {
       ofs << i << std::endl;
     }
