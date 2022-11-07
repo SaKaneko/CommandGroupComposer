@@ -61,7 +61,7 @@ int main(int argc, char* argv[]) {
       OutDir = argv[2];
     }
   }
-  auto rootpath = FU.CreateDirectory(OutDir, "CGCout_CCEdetail");
+  auto rootpath = FU.CreateDirectory(OutDir, "CGCout_diftasks");
   RunForEachParams(MdgDir, rootpath);
   return 0;
 }

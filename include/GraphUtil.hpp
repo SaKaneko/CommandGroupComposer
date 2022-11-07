@@ -15,9 +15,8 @@ class CGInfo {
 
 public:
   CGInfo()
-      : var_cg(CGC::VAR_CG), var_kernel(CGC::VAR_KERNEL),
-        ECOST(CGC::VAR_KERNEL, 0), CCOST(CGC::VAR_CG, 0), W(CGC::VAR_CG, 1),
-        type_kernel(CGC::VAR_CG) {
+      : var_cg(CGC::VAR_CG), var_kernel(CGC::VAR_KERNEL), ECOST(0),
+        CCOST(CGC::VAR_CG, 0), W(CGC::VAR_CG, 1), type_kernel(CGC::VAR_CG) {
     for (auto& i : ECOST) {
       double AVR = REC_TIME_MS * ECR;
       i          = BoundNormalDistribution(AVR, AVR / 3, 1, AVR * 2);

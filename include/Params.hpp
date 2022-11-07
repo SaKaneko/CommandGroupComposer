@@ -6,7 +6,7 @@
 namespace CGC {
 const std::vector<int> VAR_CG_loader = {1, 2, 4, 8};
 int VAR_CG                           = 4;
-int VAR_KERNEL                       = 2 * VAR_CG;
+int VAR_KERNEL                       = 0;
 const int MAX_W                      = 4;
 const std::vector<double> ECR_loader = {0.5, 1.0, 2.0, 4.0};
 const std::vector<double> CCE_loader = {0.001, 0.05, 0.1, 0.25, 0.5, 1.0, 2.0};
