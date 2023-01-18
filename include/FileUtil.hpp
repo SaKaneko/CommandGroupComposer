@@ -17,8 +17,8 @@ fs::path add_conf(fs::path pt) {
     std::ofstream ofs;
     ofs.open(pt, std::ios::app);
     ofs << "Var_CG " << CGC::VAR_CG << std::endl;
-    ofs << "ECR " << CGC::ECR << std::endl;
-    ofs << "CCE " << CGC::CCE << std::endl;
+    ofs << "CRR " << CGC::ECR << std::endl;
+    ofs << "CCR " << CGC::CCE << std::endl;
     ofs.close();
   }
   else {
@@ -26,8 +26,8 @@ fs::path add_conf(fs::path pt) {
     std::ofstream ofs;
     ofs.open(pt);
     ofs << "Var_CG " << CGC::VAR_CG << std::endl;
-    ofs << "ECR " << CGC::ECR << std::endl;
-    ofs << "CCE " << CGC::CCE << std::endl;
+    ofs << "CRR " << CGC::ECR << std::endl;
+    ofs << "CCR " << CGC::CCE << std::endl;
     ofs.close();
   }
   return pt;
@@ -59,7 +59,8 @@ class FileUtil {
     }
     else {
       if (!fs::exists(
-              p / (FileName + pref + std::to_string(rollingnumber) + afterf))) {
+              p / (FileName + pref + std::to_string(rollingnumber) + afterf)))
+      {
         rollingmap[p][FileName]++;
         return p / (FileName + pref + std::to_string(rollingnumber) + afterf);
       }
@@ -67,7 +68,8 @@ class FileUtil {
 
     while (1) {
       if (!fs::exists(
-              p / (FileName + pref + std::to_string(rollingnumber) + afterf))) {
+              p / (FileName + pref + std::to_string(rollingnumber) + afterf)))
+      {
         break;
       }
       else {
@@ -101,10 +103,12 @@ public:
     }
     std::vector<std::pair<fs::path, fs::path>> ret;
     for (const fs::directory_entry& x :
-         fs::recursive_directory_iterator(target)) {
+         fs::recursive_directory_iterator(target))
+    {
       if (x.is_directory()) {
         if (fs::create_directory(GenerateRoot /
-                                 x.path().lexically_proximate(target))) {
+                                 x.path().lexically_proximate(target)))
+        {
           ret.push_back(
               {x.path(), GenerateRoot / x.path().lexically_proximate(target)});
         }
@@ -124,7 +128,8 @@ public:
     }
     std::vector<std::pair<fs::path, fs::path>> ret;
     for (const fs::directory_entry& x :
-         fs::recursive_directory_iterator(target)) {
+         fs::recursive_directory_iterator(target))
+    {
       if (!x.is_directory() && x.path().extension() == tstem) {
         ret.push_back(
             {x.path(), GenerateRoot / x.path().lexically_proximate(target)});

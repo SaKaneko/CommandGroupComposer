@@ -18,11 +18,11 @@ void RunForEachParams(fs::path p, fs::path outroot = ".") {
     auto vp       = FU.CreateDirectory(outroot, OutputDirName);
     for (auto& ecr : CGC::ECR_loader) {
       CGC::ECR      = ecr;
-      OutputDirName = "ECR_" + std::to_string(ecr);
+      OutputDirName = "CRR_" + std::to_string(ecr);
       auto ecrp     = FU.CreateDirectory(vp, OutputDirName);
       for (auto& cce : CGC::CCE_loader) {
         CGC::CCE      = cce;
-        OutputDirName = "CCE_" + std::to_string(cce);
+        OutputDirName = "CCR_" + std::to_string(cce);
         auto ccep     = FU.CreateDirectory(ecrp, OutputDirName);
         auto dirlist  = FU.GenerateImitateDir(p, ccep);
         auto filelist = FU.GetImitateFiles(p, ccep);
@@ -61,7 +61,7 @@ int main(int argc, char* argv[]) {
       OutDir = argv[2];
     }
   }
-  auto rootpath = FU.CreateDirectory(OutDir, "CGCout_uniquetask");
+  auto rootpath = FU.CreateDirectory(OutDir, "CGCout_CCEvar");
   RunForEachParams(MdgDir, rootpath);
   return 0;
 }
