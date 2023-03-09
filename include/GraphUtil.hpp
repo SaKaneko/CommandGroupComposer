@@ -88,6 +88,56 @@ public:
     ofs.close();
     return;
   }
+
+  void GraphConstantCGs(fs::path& base_p, fs::path& output_p) {
+    std::ofstream ofs;
+    std::ifstream ifs;
+    ifs.open(base_p, std::ios::in);
+    ofs.open(output_p);
+    std::string reading_line_buffer;
+    std::getline(ifs, reading_line_buffer);
+    int cons_var_cg = std::stoi(reading_line_buffer);
+    ofs << cons_var_cg << " " << CGC::VAR_KERNEL << std::endl;
+    for (auto& i : ECOST) {
+      ofs << i << std::endl;
+    }
+    for (int i = 0; i < var_cg; i++) {
+      ofs << W[i] << " " << CCOST[i] << std::endl;
+      for (int j = 0; j < W[i]; j++) {
+        ofs << type_kernel[i][j];
+        if (j == W[i] - 1) {
+          ofs << std::endl;
+        }
+        else {
+          ofs << " ";
+        }
+      }
+    }
+
+    int kernel_type_itr = 0;
+    std::getline(ifs, reading_line_buffer);
+    int nodes = std::stoi(reading_line_buffer);
+
+    std::vector<int> CGatNode(nodes);
+    std::random_device rnd;
+    std::mt19937 mt(rnd());
+    std::uniform_int_distribution<> randW(0, var_cg - 1);
+    for (auto& i : CGatNode) {
+      i = randW(mt);
+    }
+    auto CGtypeitr = CGatNode.begin();
+    ofs << nodes << std::endl;
+    while (std::getline(ifs, reading_line_buffer)) {
+      ofs << reading_line_buffer << std::endl;
+      if (std::stoi(reading_line_buffer) != 0) {
+        std::getline(ifs, reading_line_buffer);
+        ofs << reading_line_buffer << std::endl;
+      }
+    }
+    ifs.close();
+    ofs.close();
+    return;
+  }
 };
 class Graph {
   fs::path p;
@@ -109,7 +159,8 @@ public:
     ci.OverwriteGraph(p, output_path);
     return true;
   }
-  bool GenerateNewCGsAndOutputToFile(fs::path output_path) {
+  bool ComposeConstantGraphsandOutput(CGC::CGInfo& ci, fs::path output_path) {
+    ci.GraphConstantCGs(p, output_path);
     return true;
   }
 };

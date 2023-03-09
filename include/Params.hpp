@@ -6,6 +6,8 @@
 namespace CGC {
 const std::vector<int> VAR_CG_loader = {1, 2, 4, 8};
 int VAR_CG                           = 4;
+const int const_var_CG               = 4; // Cholesky Decomposition
+// const int const_var_CG = 10; // GoogLeNet
 int VAR_KERNEL                       = 0;
 const int MAX_W                      = 4;
 const std::vector<double> ECR_loader = {0.5, 1.0, 2.0, 4.0};
